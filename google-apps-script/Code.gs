@@ -77,6 +77,9 @@ function doPost(e) {
     if (!relatedPersonName) {
       validationErrors.push("Related Person Name is required.");
     }
+    if (!description) {
+      validationErrors.push("Letter & Description is required.");
+    }
 
     if (validationErrors.length > 0) {
       return respondJSON({
