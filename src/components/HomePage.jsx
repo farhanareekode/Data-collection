@@ -33,16 +33,9 @@ export default function HomePage({ onNavigateToForm, onNavigateToLetters }) {
           <h2>ഹബീബിനൊരു കത്ത്</h2>
         </div>
 
-        {/* Malayalam Narrative Prose */}
+        {/* Malayalam Narrative Subtitle */}
         <div className="narrative-container">
           <p className="narrative-subtitle">മുത്ത് റസൂലിലേക്ക് ഒരക്ഷരത്താൽ...</p>
-          <p>
-            തീരാത്ത അനുരാഗവും പ്രണയവും ഹൃദയത്തിൽ തൊട്ട് അക്ഷരങ്ങളിലാക്കാൻ അവസരം. 
-            പുണ്യ റസൂലിലേക്ക് നിങ്ങളുടെ മനസ്സിലുള്ള അനുരാഗത്തിന്റെ വരികൾ എഴുതി അയക്കൂ...
-          </p>
-          <div className="prize-badge-banner">
-            🏆 തെരഞ്ഞെടുക്കപ്പെടുന്ന മികച്ച രചനകൾക്ക് ആകർഷകമായ സമ്മാനങ്ങൾ!
-          </div>
         </div>
 
         {/* TWO Primary Action Buttons */}
