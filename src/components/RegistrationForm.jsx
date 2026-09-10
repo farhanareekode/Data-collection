@@ -72,7 +72,7 @@ export default function RegistrationForm({ onBackToHome }) {
     try {
       const payload = {
         name: 'Anonymous',
-        relationType: 'N/A',
+        relationType: 'S/O',
         relatedPersonName: 'N/A',
         description: description.trim(), // Maps directly to Description column in Google Sheets
       };
