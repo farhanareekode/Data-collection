@@ -1029,3 +1029,268 @@ textarea {
   letter-spacing: 0.5px;
   margin-top: 6px;
 }
+
+/* Alert Notification Banners */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.alert-success {
+  background: rgba(22, 101, 52, 0.12);
+  border: 1.5px solid rgba(22, 101, 52, 0.35);
+  color: #14532d;
+}
+
+.alert-error {
+  background: rgba(185, 28, 28, 0.12);
+  border: 1.5px solid rgba(185, 28, 28, 0.35);
+  color: #7f1d1d;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alert-content {
+  flex-grow: 1;
+}
+
+.alert-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+/* ==========================================================================
+   Comprehensive Responsive System (Mobile, Tablet, Desktop)
+   ========================================================================== */
+
+/* Tablet & Smaller Screens (<= 640px) */
+@media (max-width: 640px) {
+  body {
+    padding: 20px 12px;
+  }
+
+  .parchment-hero-card,
+  .parchment-card {
+    padding: 28px 20px 22px 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .parchment-hero-card::before,
+  .parchment-card::before {
+    margin: 5px;
+  }
+
+  .title-centered-white {
+    font-size: 2.2rem;
+    word-break: break-word;
+  }
+
+  .calligraphy-banner h2 {
+    font-size: 2.3rem;
+    word-break: break-word;
+  }
+
+  .form-banner-centered h2,
+  .letters-banner h1 {
+    font-size: 2rem;
+    word-break: break-word;
+  }
+
+  .letters-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* Compact Mobile Screens (<= 520px) */
+@media (max-width: 520px) {
+  body {
+    padding: 14px 10px;
+  }
+
+  .top-pill-tag {
+    font-size: 0.72rem;
+    padding: 4px 12px;
+    letter-spacing: 1px;
+  }
+
+  .title-centered-white {
+    font-size: 1.95rem;
+  }
+
+  .event-details-card-centered {
+    padding: 6px 14px;
+    gap: 6px 10px;
+    font-size: 0.76rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .home-action-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .preview-cards-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .page-top-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn-back-nav,
+  .btn-write-nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-input {
+    font-size: 0.9rem;
+    padding: 12px 14px 12px 42px;
+  }
+}
+
+/* Small Smartphone Viewports (<= 414px - iPhone SE 375px, Galaxy S8, etc) */
+@media (max-width: 414px) {
+  body {
+    padding: 10px 8px;
+  }
+
+  .parchment-hero-card,
+  .parchment-card {
+    padding: 20px 12px 16px 12px;
+    border-radius: 16px;
+  }
+
+  .parchment-hero-card::before,
+  .parchment-card::before {
+    margin: 4px;
+  }
+
+  .title-centered-white {
+    font-size: 1.75rem;
+  }
+
+  .calligraphy-banner h2 {
+    font-size: 1.85rem;
+  }
+
+  .form-banner-centered h2,
+  .letters-banner h1 {
+    font-size: 1.65rem;
+  }
+
+  .event-details-card-centered {
+    font-size: 0.7rem;
+    padding: 6px 10px;
+    gap: 4px 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-action-primary {
+    padding: 12px 12px;
+    gap: 10px;
+  }
+
+  .btn-main-label {
+    font-size: 0.92rem;
+  }
+
+  .btn-sub-label {
+    font-size: 0.7rem;
+  }
+
+  .cta-arrow {
+    flex-shrink: 0;
+  }
+
+  .preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .preview-mini-card {
+    padding: 10px 12px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .letter-card {
+    padding: 16px 12px;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+  }
+
+  .letter-modal-overlay {
+    padding: 10px 6px;
+  }
+
+  .letter-modal-card {
+    max-height: 94vh;
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    padding: 12px 14px;
+  }
+
+  .modal-body {
+    padding: 14px 12px;
+  }
+
+  .modal-title {
+    font-size: 1.15rem;
+  }
+
+  .modal-text-content {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    word-break: break-word;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .btn-copy,
+  .btn-modal-close {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .poster-footer {
+    font-size: 0.78rem;
+    padding: 0 4px;
+  }
+}
+
