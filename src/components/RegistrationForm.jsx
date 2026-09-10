@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  User, 
-  Users, 
-  FileText, 
+  MessageSquare, 
   CheckCircle2, 
   AlertCircle, 
   Send, 
@@ -11,80 +9,42 @@ import {
 } from 'lucide-react';
 import { submitToGoogleSheets } from '../services/googleSheets';
 
-const INITIAL_FORM_STATE = {
-  name: '',
-  relationType: 'S/O',
-  relatedPersonName: '',
-  description: '',
-};
-
 export default function RegistrationForm({ onBackToHome }) {
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
+  const [touched, setTouched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: '' });
 
   // Field validation logic
-  const validate = (data = formData) => {
-    const newErrors = {};
-
-    if (!data.name.trim()) {
-      newErrors.name = 'പേര് നൽകേണ്ടതുണ്ട് / Full name is required';
-    } else if (data.name.trim().length < 2) {
-      newErrors.name = 'കുറഞ്ഞത് 2 അക്ഷരങ്ങൾ വേണം / Minimum 2 characters required';
+  const validate = (text = description) => {
+    if (!text.trim()) {
+      return 'അഭിപ്രായം രേഖപ്പെടുത്തേണ്ടതുണ്ട് / Feedback is required';
     }
-
-    if (!data.relationType) {
-      newErrors.relationType = 'ബന്ധം തിരഞ്ഞെടുക്കുക / Relation type is required';
-    } else if (!['S/O', 'D/O', 'W/O'].includes(data.relationType)) {
-      newErrors.relationType = 'Invalid relation type selected';
-    }
-
-    if (!data.relatedPersonName.trim()) {
-      newErrors.relatedPersonName = 'ബന്ധപ്പെട്ടയാളുടെ പേര് നൽകുക / Related person name is required';
-    } else if (data.relatedPersonName.trim().length < 2) {
-      newErrors.relatedPersonName = 'കുറഞ്ഞത് 2 അക്ഷരങ്ങൾ വേണം / Minimum 2 characters required';
-    }
-
-    if (!data.description.trim()) {
-      newErrors.description = 'കത്ത് / വിവരണം നൽകേണ്ടതുണ്ട് / Letter & Description is required';
-    }
-
-    return newErrors;
+    return '';
   };
 
   // Handle Input Changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedForm = { ...formData, [name]: value };
-    setFormData(updatedForm);
+    const value = e.target.value;
+    setDescription(value);
 
-    if (touched[name]) {
-      const validationErrors = validate(updatedForm);
-      setErrors((prev) => ({
-        ...prev,
-        [name]: validationErrors[name],
-      }));
+    if (touched) {
+      setError(validate(value));
     }
   };
 
   // Handle Blur
-  const handleBlur = (e) => {
-    const { name } = e.target;
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    const validationErrors = validate();
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validationErrors[name],
-    }));
+  const handleBlur = () => {
+    setTouched(true);
+    setError(validate());
   };
 
   // Form Reset
   const handleReset = () => {
-    setFormData(INITIAL_FORM_STATE);
-    setErrors({});
-    setTouched({});
+    setDescription('');
+    setError('');
+    setTouched(false);
     setSubmitStatus({ type: null, message: '' });
   };
 
@@ -94,21 +54,14 @@ export default function RegistrationForm({ onBackToHome }) {
 
     if (isSubmitting) return;
 
-    const allTouched = {
-      name: true,
-      relationType: true,
-      relatedPersonName: true,
-      description: true,
-    };
-    setTouched(allTouched);
+    setTouched(true);
+    const validationError = validate();
+    setError(validationError);
 
-    const validationErrors = validate();
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
+    if (validationError) {
       setSubmitStatus({
         type: 'error',
-        message: 'ചുവടെ നൽകിയിട്ടുള്ള വിവരങ്ങൾ ശരിയായി നൽകുക / Please complete all required fields.',
+        message: validationError,
       });
       return;
     }
@@ -118,10 +71,10 @@ export default function RegistrationForm({ onBackToHome }) {
 
     try {
       const payload = {
-        name: formData.name.trim(),
-        relationType: formData.relationType,
-        relatedPersonName: formData.relatedPersonName.trim(),
-        description: formData.description.trim(),
+        name: 'Anonymous',
+        relationType: 'N/A',
+        relatedPersonName: 'N/A',
+        description: description.trim(), // Maps directly to Description column in Google Sheets
       };
 
       const result = await submitToGoogleSheets(payload);
@@ -129,11 +82,11 @@ export default function RegistrationForm({ onBackToHome }) {
       if (result.success) {
         setSubmitStatus({
           type: 'success',
-          message: 'നിങ്ങളുടെ വിവരങ്ങൾ വിജയകരമായി സമർപ്പിച്ചു! / Registration submitted successfully!',
+          message: 'നിങ്ങളുടെ അഭിപ്രായം വിജയകരമായി രേഖപ്പെടുത്തി! / Feedback submitted successfully!',
         });
-        setFormData(INITIAL_FORM_STATE);
-        setErrors({});
-        setTouched({});
+        setDescription('');
+        setError('');
+        setTouched(false);
       } else {
         setSubmitStatus({
           type: 'error',
@@ -159,11 +112,11 @@ export default function RegistrationForm({ onBackToHome }) {
         </button>
       )}
 
-      {/* Calligraphy Banner matching Poster */}
+      {/* Form Title Banner */}
       <div className="form-banner-centered">
-        <h2>ഹബീബിനൊരു കത്ത്</h2>
+        <h2>അഭിപ്രായം രേഖപ്പെടുത്താം</h2>
         <p>
-          മുത്ത് റസൂലിലേക്ക് ഒരക്ഷരത്താൽ... നിങ്ങളുടെ മനസ്സിലുള്ള അനുരാഗ വരികളും സന്ദേശങ്ങളും സമർപ്പിക്കൂ...
+          വസ്ഫുൽ ഹസീൻ പരിപാടിയെക്കുറിച്ചുള്ള നിങ്ങളുടെ അഭിപ്രായങ്ങളും ആശംസകളും ഫീഡ്‌ബാക്കും രേഖപ്പെടുത്തൂ...
         </p>
       </div>
 
@@ -189,115 +142,29 @@ export default function RegistrationForm({ onBackToHome }) {
       )}
 
       <form onSubmit={handleSubmit} noValidate className="form-grid">
-        {/* Full Name Field */}
-        <div className="form-group">
-          <label htmlFor="name">
-            പേര് / Full Name <span className="required-star">*</span>
-          </label>
-          <div className="input-wrapper">
-            <User className="input-icon" size={18} />
-            <input
-              id="name"
-              name="name"
-              type="text"
-              className={`has-icon ${errors.name && touched.name ? 'input-error' : ''}`}
-              placeholder="ഉദാ: മുഹമ്മദ് ഫർഹാൻ / e.g. Muhammed Farhan"
-              value={formData.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              disabled={isSubmitting}
-              required
-              autoComplete="name"
-            />
-          </div>
-          {errors.name && touched.name && (
-            <span className="error-text">
-              <AlertCircle size={14} /> {errors.name}
-            </span>
-          )}
-        </div>
-
-        {/* Relation Type & Related Person Row */}
-        <div className="form-row">
-          {/* Relation Type Dropdown */}
-          <div className="form-group">
-            <label htmlFor="relationType">
-              ബന്ധം / Relation <span className="required-star">*</span>
-            </label>
-            <div className="input-wrapper">
-              <select
-                id="relationType"
-                name="relationType"
-                className={`${errors.relationType && touched.relationType ? 'input-error' : ''}`}
-                value={formData.relationType}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={isSubmitting}
-                required
-              >
-                <option value="S/O">S/O (മകൻ / Son of)</option>
-                <option value="D/O">D/O (മകൾ / Daughter of)</option>
-                <option value="W/O">W/O (ഭാര്യ / Wife of)</option>
-              </select>
-            </div>
-            {errors.relationType && touched.relationType && (
-              <span className="error-text">
-                <AlertCircle size={14} /> {errors.relationType}
-              </span>
-            )}
-          </div>
-
-          {/* Related Person Name Field */}
-          <div className="form-group">
-            <label htmlFor="relatedPersonName">
-              ബന്ധപ്പെട്ടയാളുടെ പേര് / Related Person <span className="required-star">*</span>
-            </label>
-            <div className="input-wrapper">
-              <Users className="input-icon" size={18} />
-              <input
-                id="relatedPersonName"
-                name="relatedPersonName"
-                type="text"
-                className={`has-icon ${errors.relatedPersonName && touched.relatedPersonName ? 'input-error' : ''}`}
-                placeholder="ഉദാ: ഇബ്രാഹിം അഹമ്മദ്"
-                value={formData.relatedPersonName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={isSubmitting}
-                required
-              />
-            </div>
-            {errors.relatedPersonName && touched.relatedPersonName && (
-              <span className="error-text">
-                <AlertCircle size={14} /> {errors.relatedPersonName}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Mandatory Letter & Description Field */}
+        {/* Single Mandatory Feedback Field */}
         <div className="form-group">
           <label htmlFor="description">
-            Letter & Description <span className="required-star">*</span>
+            അഭിപ്രായം രേഖപ്പെടുത്താം / Feedback <span className="required-star">*</span>
           </label>
           <div className="input-wrapper">
-            <FileText className="input-icon" size={18} style={{ top: '16px' }} />
+            <MessageSquare className="input-icon" size={18} style={{ top: '16px' }} />
             <textarea
               id="description"
               name="description"
-              className={`has-icon ${errors.description && touched.description ? 'input-error' : ''}`}
-              rows={5}
-              placeholder="നിങ്ങളുടെ മനസ്സിൻ താളുകളിലുള്ള അനുരാഗ വരികളും സന്ദേശങ്ങളും ഇവിടെ കുറിക്കാം..."
-              value={formData.description}
+              className={`has-icon ${error && touched ? 'input-error' : ''}`}
+              rows={6}
+              placeholder="നിങ്ങളുടെ അഭിപ്രായങ്ങളും ആശംസകളും ഫീഡ്‌ബാക്കും ഇവിടെ കുറിക്കാം..."
+              value={description}
               onChange={handleChange}
               onBlur={handleBlur}
               disabled={isSubmitting}
               required
             />
           </div>
-          {errors.description && touched.description && (
+          {error && touched && (
             <span className="error-text">
-              <AlertCircle size={14} /> {errors.description}
+              <AlertCircle size={14} /> {error}
             </span>
           )}
         </div>
@@ -309,7 +176,7 @@ export default function RegistrationForm({ onBackToHome }) {
             className="btn btn-secondary"
             onClick={handleReset}
             disabled={isSubmitting}
-            title="ക്ലിയർ ചെയ്യുക / Reset form"
+            title="ക്ലിയർ ചെയ്യുക / Reset"
           >
             <RotateCcw size={16} /> Reset
           </button>

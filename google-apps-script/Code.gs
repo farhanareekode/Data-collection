@@ -58,27 +58,16 @@ function doPost(e) {
     }
 
     // 2. Extract and sanitize fields
-    var name = payload.name ? String(payload.name).trim() : "";
-    var relationType = payload.relationType ? String(payload.relationType).trim() : "";
-    var relatedPersonName = payload.relatedPersonName ? String(payload.relatedPersonName).trim() : "";
+    var name = payload.name ? String(payload.name).trim() : "Anonymous";
+    var relationType = payload.relationType ? String(payload.relationType).trim() : "N/A";
+    var relatedPersonName = payload.relatedPersonName ? String(payload.relatedPersonName).trim() : "N/A";
     var description = payload.description ? String(payload.description).trim() : "";
 
     // 3. Server-side Validation
     var validationErrors = [];
 
-    if (!name) {
-      validationErrors.push("Name is required.");
-    }
-    if (!relationType) {
-      validationErrors.push("Relation Type is required.");
-    } else if (["S/O", "D/O", "W/O"].indexOf(relationType) === -1) {
-      validationErrors.push("Relation Type must be S/O, D/O, or W/O.");
-    }
-    if (!relatedPersonName) {
-      validationErrors.push("Related Person Name is required.");
-    }
     if (!description) {
-      validationErrors.push("Letter & Description is required.");
+      validationErrors.push("അഭിപ്രായം രേഖപ്പെടുത്തുക / Feedback is required.");
     }
 
     if (validationErrors.length > 0) {
