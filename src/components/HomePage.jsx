@@ -16,14 +16,6 @@ export default function HomePage({ onNavigateToForm, onNavigateToLetters }) {
         </div>
         
         <h1 className="title-centered-white">വസ്ഫുൽ ഹസീൻ</h1>
-        
-        <div className="event-details-card-centered">
-          <span className="event-date-highlight">10 SEPTEMBER 2026</span>
-          <span className="dot-separator">•</span>
-          <span>THURSDAY 7:30 PM</span>
-          <span className="dot-separator">•</span>
-          <span>NORTH KOZHAKKOTTUR</span>
-        </div>
       </header>
 
       {/* Main Parchment Hero Card */}
